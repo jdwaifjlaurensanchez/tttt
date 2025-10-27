@@ -1,0 +1,18 @@
+<launch>
+    <!-- 启动RViz可视化 -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lio_ndt)/rviz/front_end.rviz"/>
+    
+    <!-- 启动前端里程计节点 -->
+    <node pkg="lio_ndt" type="front_end_node" name="front_end_node" output="screen">
+        <!-- 配准方法参数: ICP_GN 或 NDT -->
+        <param name="registration_method" value="NDT" />
+    </node>
+    
+    <!-- 发布静态TF变换 -->
+    <node pkg="tf" type="static_transform_publisher" name="imu_to_lidar_tf" 
+          args="0 0 0 0 0 0 imu_link velo_link 100" />
+    
+    <!-- 发布世界坐标系到地图坐标系的变换 -->
+    <node pkg="tf" type="static_transform_publisher" name="world_to_map_tf" 
+          args="0 0 0 0 0 0 world map 100" />
+</launch>
